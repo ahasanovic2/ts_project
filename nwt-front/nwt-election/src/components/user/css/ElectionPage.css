@@ -1,0 +1,142 @@
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 200px;
+    padding: 20px;
+    height: auto;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.election-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 15px; /* add left and right padding */
+}
+
+
+.election-card {
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    flex-basis: calc(33.33% - 30px); /* change to roughly one third, minus margins */
+    margin: 0 15px 20px; /* add left and right margins */
+    background: rgba(0,1,5,0.41);
+}
+
+.election-card:nth-child(3n) {
+    margin-right: 0;
+}
+
+.election-card .election-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.election-card .election-details {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.election-card p {
+    margin-bottom: 10px;
+}
+
+.election-card button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #003399;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.election-card button:hover {
+    background-color: #001a66;
+}
+
+.title {
+    font-size: 20px;
+    color: #fff;
+}
+
+.header {
+    background-color: #0058B8;
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 0;
+}
+
+.nav-buttons a {
+    margin: 0 10px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-buttons a:hover {
+    text-decoration: underline;
+}
+
+.main-content {
+    margin-top: 60px; /* Adjust this value as needed */
+}
+
+.small-text {
+    font-size: 12px;
+}
+
+.rezultati {
+    text-align: center;
+    justify-content: center;
+}
+
+.rezultati p {
+    text-align: center;
+    color: #003399;
+}
+
+.contact-info {
+    display: none; /* Inicijalno sakrivanje kontaktnih informacija */
+    margin-top: 20px;
+}
+
+.nav-buttons button:hover + .contact-info {
+    display: block; /* Prikazivanje kontaktnih informacija kada je dugme u hover stanju */
+}
+
+.contact-info p {
+    font-size: 12px;
+    margin-bottom: 5px;
+}

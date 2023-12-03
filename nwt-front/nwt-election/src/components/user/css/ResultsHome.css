@@ -1,0 +1,118 @@
+.header {
+    background-color: #0058B8;
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 0;
+}
+
+.nav-buttons a {
+    margin: 0 10px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.nav-buttons a:hover {
+    text-decoration: underline;
+}
+
+.results-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 200px;  /* Adjust as needed */
+    padding: 20px;  /* Adjust as needed */
+    background-color: #f0f0f0;  /* Light gray */
+    border-radius: 10px;
+}
+
+.results-options label {
+    margin-bottom: 10px;
+}
+
+.results-options input[type="text"] {
+    margin-top: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.results-options button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #0058B8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.results-options button:hover {
+    background-color: #003f7f;
+}
+
+.results-table {
+    align-items: center;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.results-table table {
+    width: 80%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.results-table th, .results-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.results-table th {
+    background-color: #0058B8;
+    color: #fff;
+}
+
+.results-table td {
+    color: #000;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
+.contact-info {
+    display: none; /* Inicijalno sakrivanje kontaktnih informacija */
+    margin-top: 20px;
+}
+
+.nav-buttons button:hover + .contact-info {
+    display: block; /* Prikazivanje kontaktnih informacija kada je dugme u hover stanju */
+}
+
+.contact-info p {
+    font-size: 12px;
+    margin-bottom: 5px;
+}

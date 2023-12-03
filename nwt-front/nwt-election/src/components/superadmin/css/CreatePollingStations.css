@@ -1,0 +1,57 @@
+.pollingstation-content {
+    margin-top: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 100%;
+}
+
+.pollingstation-content h1 {
+    text-align: center;
+}
+
+.pollingstation-content form {
+    width: 20%;
+    border: 2px solid black;
+    padding: 20px;
+    padding-right: 30px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 15px;
+    background-color: #f0f0f0;
+}
+
+.pollingstation-content form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.pollingstation-content form input, 
+.pollingstation-content form select {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 5px;
+}
+
+.pollingstation-content form button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px 20px;
+}
+
+.error-class {
+    color: red;
+    font-weight: bold;
+}
+
+.error-class p {
+    color: red;
+}
+
+.dugmad {
+    display: flex;
+    flex-direction: row;
+}

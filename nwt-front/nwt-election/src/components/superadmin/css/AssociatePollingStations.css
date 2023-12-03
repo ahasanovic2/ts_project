@@ -1,0 +1,79 @@
+.content-ps {
+    margin-top: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 100%;
+}
+
+.content-ps form {
+    width: 40%;
+    border: 2px solid black;
+    padding: 20px;
+    padding-right: 30px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 15px;
+    background-color: #f0f0f0;
+}
+
+.content-ps form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.content-ps form input, 
+.content-ps form select {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 5px;
+}
+
+.content-ps form button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px 20px;
+}
+
+.error-class {
+    color: red;
+    font-weight: bold;
+}
+
+.error-class p {
+    color: red;
+}
+
+.dugmad {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.content-ps form table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+  }
+  
+  .content-ps form th, 
+  .content-ps form td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .content-ps form th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #f0f0f0;
+  }
+
+  .dugme {
+    background-color: blue;
+    color: #fff;
+  }
+  

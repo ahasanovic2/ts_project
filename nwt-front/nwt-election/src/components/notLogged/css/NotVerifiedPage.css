@@ -1,0 +1,55 @@
+.back {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: white;
+    background-image: linear-gradient(39deg, #0058B8, #0C71E0, #fff, #FEEB89, #FFD700);
+}
+
+.frame {
+    height: auto;
+    width: 430px;
+    border: 3px solid white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(0,1,5,0.41);
+    font-size: 10px;
+    margin: 10px;
+    padding: 25px;
+}
+
+.frame h1 {
+    color: #fff;
+}
+
+.buttons {
+    width: 100%;
+}
+
+.loginButton {
+    padding: 0;
+    width: 33%;
+    align-items: center;
+    text-align: center;
+}
+
+.homeButton {
+    padding: 0;
+    width: 33%;
+    align-items: center;
+    text-align: center;
+}
+
+.resendButton {
+    padding: 0;
+    width: 33%;
+    align-items: center;
+    text-align: center;
+}
+
+

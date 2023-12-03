@@ -1,0 +1,47 @@
+.candidates-content {
+    margin-top: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    width: 100%;
+}
+
+.candidates-content form {
+    width: 30%;
+    border: 2px solid black;
+    padding: 20px;
+    padding-right: 30px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 15px;
+    background-color: #f0f0f0;
+}
+
+.candidates-content form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.candidates-content form input, .candidates-content form textarea {
+    width: 100%;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 5px;
+}
+
+.candidates-content form textarea {
+    height: 50px;
+}
+
+.candidates-content form button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px 20px;
+}
+
+.dugmad {
+    display: flex;
+    flex-direction: row;
+}

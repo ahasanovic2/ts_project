@@ -15,7 +15,7 @@ const ElectionPage = () => {
         const fetchElections = async () => {
             const token = localStorage.getItem('access_token');
             try {
-                const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:8080';
+                const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://localhost:8443';
                 const response = await axios.get(`${BASE_URL}/voting/elections`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });

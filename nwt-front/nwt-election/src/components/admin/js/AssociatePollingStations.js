@@ -12,7 +12,7 @@ const AssociatePollingStations = () => {
     const [errorMessage, setErrorMessage] = useState("");
 
     const fetchElections = async () => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://localhost:8443';
         const token = localStorage.getItem('access_token');
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');

@@ -70,6 +70,6 @@ public class AuthenticationController {
     }
 
     private String applicationUrl(HttpServletRequest request) {
-        return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+        return "https://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
     }
 }

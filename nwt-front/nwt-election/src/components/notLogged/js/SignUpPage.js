@@ -39,7 +39,7 @@ function SignUpPage() {
             const password = document.getElementById("password").value;
             const role = "USER"; // since role is always "USER"
 
-            const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:8080';
+            const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://localhost:8443';
             const response = await fetch(`${BASE_URL}/authentication/register`, { // replace with your API url
                 method: 'POST',
                 headers: {

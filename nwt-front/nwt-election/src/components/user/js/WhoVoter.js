@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../css/WhoVoter.css';
 import Header from './Header';
 

@@ -6,6 +6,7 @@ import '../css/LoginPage.css'
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
+import encryptPassword from "../../common/Hashing";
 
 function LoginPage(props) {
 
@@ -20,10 +21,13 @@ function LoginPage(props) {
     };
 
     const handleLogin = async () => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://localhost:8443';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
         
         try {
-            const response = await axios.post(`${BASE_URL}/authentication/login`, {email, password});
+            const response = await axios.post(`${BASE_URL}/authentication/login`, {
+                email: email,
+                password: password
+            });
             const tokens = response.data;
             localStorage.setItem('access_token', tokens.access_token);
             localStorage.setItem('refresh_token', tokens.refresh_token);

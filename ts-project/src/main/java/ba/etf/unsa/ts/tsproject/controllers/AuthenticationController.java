@@ -42,7 +42,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity register( @RequestBody AuthenticationRequest request) {
+    public ResponseEntity register( @RequestBody AuthenticationRequest request) throws Exception {
         return authenticationService.authenticate(request);
     }
 
@@ -70,6 +70,6 @@ public class AuthenticationController {
     }
 
     private String applicationUrl(HttpServletRequest request) {
-        return "https://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+        return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
     }
 }

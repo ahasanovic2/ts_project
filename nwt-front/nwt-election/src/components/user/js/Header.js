@@ -1,5 +1,5 @@
 // Header.js
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import { useHistory } from 'react-router-dom';
 
 const Header = ({voting}) => {
@@ -19,7 +19,6 @@ const Header = ({voting}) => {
         history.push('/');
     };
 
-    const [selectedElection, setSelectedElection] = useState(null);
     const [showContactInfo, setShowContactInfo] = useState(false);
 
     const handleContactHover = () => {

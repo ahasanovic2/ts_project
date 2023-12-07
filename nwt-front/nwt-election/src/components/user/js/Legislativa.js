@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../css/Legislativa.css';
-import { useHistory } from 'react-router-dom';
 import Header from './Header';
 
 const Legislativa = (props) => {

@@ -4,9 +4,7 @@ import { useHistory } from 'react-router-dom';
 import Header from './Header';
 
 const HowVoter = () => {
-    const history = useHistory();
-    const [showContactInfo, setShowContactInfo] = useState(false);
-    
+
     return (
         <div className="landing-page">
             <Header />

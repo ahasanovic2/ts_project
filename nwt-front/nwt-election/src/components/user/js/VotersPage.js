@@ -1,51 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../css/VotersPage.css';
 import HowVoter from './HowVoter';
 import WhoVoter from './WhoVoter';
-import { useHistory, Switch, Route, useRouteMatch, useLocation } from 'react-router-dom';
+import { useHistory, Switch, Route, useLocation } from 'react-router-dom';
 import Header from './Header';
 
 const VotersPage = () => {
 
-    const match = useRouteMatch();
     const location = useLocation();
     const history = useHistory();
-    const [showContactInfo, setShowContactInfo] = useState(false);
-
-    const handleContactHover = () => {
-        setShowContactInfo(true);
-    };
-
-    const handleContactLeave = () => {
-        setShowContactInfo(false);
-    };
-
-
-    const handleSwitchToLanding = () => {
-        history.push('/landing');
-    };
-
-    const handleSwitchToVoters = () => {
-        history.push('/voters');
-    };
-
-    const handleSwitchToLegislativa = () => {
-        history.push('/legislativa');
-    };
-
-    const handleSwitchToIzbori = () => {
-        history.push('/election')
-    };
-
-    const handleSwitchToResults = () => {
-        history.push('/results')
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        history.push('/');
-    };
 
     const handleButtonClick = (route) => {
         history.push(`/voters/${route}`);

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import '../css/ResultsHome.css'
 import { useHistory } from 'react-router-dom';
 import Header from './Header';
@@ -17,11 +17,10 @@ const ResultsHome = () => {
     const [error4, setError4] = useState('');
     const [error5, setError5] = useState('');
     const [error6, setError6] = useState('');
-    const history = useHistory();
 
     const handleResultsOption = async (option) => {
         const token = localStorage.getItem('access_token');
-        const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://localhost:8443';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
         switch (option) {
             case 1:
                 try {

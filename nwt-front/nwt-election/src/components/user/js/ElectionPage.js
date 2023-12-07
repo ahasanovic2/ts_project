@@ -15,7 +15,7 @@ const ElectionPage = () => {
         const fetchElections = async () => {
             const token = localStorage.getItem('access_token');
             try {
-                const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://localhost:8443';
+                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
                 const response = await axios.get(`${BASE_URL}/voting/elections`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -35,26 +35,6 @@ const ElectionPage = () => {
     };
 
     const history = useHistory();
-
-    const handleSwitchToLanding = () => {
-        history.push('/landing');
-    };
-
-    const handleSwitchToVoters = () => {
-        history.push('/voters');
-    };
-
-    const handleSwitchToLegislativa = () => {
-        history.push('/legislativa');
-    };
-
-    const handleSwitchToIzbori = () => {
-        history.push('/election')
-    };
-
-    const handleSwitchToResults = () => {
-        history.push('/results')
-    };
 
     const handleLogout = () => {
         localStorage.removeItem('access_token');

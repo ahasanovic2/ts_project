@@ -1,20 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import '../css/ChangePassword.css';
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
-import axios from "axios";
 
 const ChangePassword = () => {
-    const history = useHistory();
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-
-
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
 
     const handleSubmit = async (e) => {
         try {
@@ -22,7 +15,7 @@ const ChangePassword = () => {
             setErrorMessage("");
         
             const token = localStorage.getItem('access_token');
-            const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://localhost:8443';
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
             const headers = new Headers();
             headers.append('Content-Type', 'application/json');
             headers.append('Authorization', `Bearer ${token}`);

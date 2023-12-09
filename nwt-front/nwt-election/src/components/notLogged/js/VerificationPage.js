@@ -1,10 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import '../css/VerificationPage.css';
 
 function VerificationPage() {
 
     const history = useHistory();
+
+    useEffect(() => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+    }, []);
 
     const handleLogin = async () => {
         history.push('/login');

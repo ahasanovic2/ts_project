@@ -71,7 +71,7 @@ function App() {
                 <PrivateRoute path="/admin-add-pollingstations" component={AssociatePollingStations} onLogout={handleLogout}/>
                 <PrivateRoute path="/admin-create-candidates" component={CreatingCandidates} onLogout={handleLogout}/>
                 <PrivateRoute path="/admin-create-lists" component={CreatingLists} onLogout={handleLogout}/>
-                <PrivateRoute path="/admin-landing" component={AdminLandingPage} onLogout={handleLogout} />
+                <PrivateRoute path="/admin-landing" component={AdminLandingPage} onLogout={handleLogout}/>
                 <PrivateRoute path="/admin-create-elections" component={CreatingElections} onLogout={handleLogout} />
                 <PrivateRoute path="/results" component={ResultsHome} onLogout={handleLogout} />
                 <PrivateRoute path="/choose-pollingstation" component={ChoosePSPage} onLogout={handleLogout}/>

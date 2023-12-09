@@ -12,7 +12,6 @@ import ba.etf.unsa.ts.tsproject.token.Token;
 import ba.etf.unsa.ts.tsproject.token.TokenRepository;
 import ba.etf.unsa.ts.tsproject.token.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.grpc.netty.shaded.io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +22,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -82,7 +77,7 @@ public class AuthenticationService {
 
         try {
             if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDetails(LocalDateTime.now(),"password","Wrong password"));
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDetails(LocalDateTime.now(),"password","Wrong password"));
 
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(

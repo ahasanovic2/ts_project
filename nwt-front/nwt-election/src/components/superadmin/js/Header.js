@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
+import GetRole from "../../GetRole";
 
 const Header = () => {
     const history = useHistory();
@@ -7,6 +8,19 @@ const Header = () => {
     const handleSwitchTo = (path) => {
         history.push(path);
     };
+
+    useEffect(() => {
+        var role = GetRole(localStorage.getItem('access_token'));
+        if (role === 'ROLE_ADMIN') {
+            history.push('/admin-landing');
+            window.location.reload();
+            alert('You tried to access Superadmin\'s page while not logged in as admin. You have been returned to admin\'s homepage.');
+        } else if (role === 'ROLE_USER') {
+            history.push('/landing');
+            window.location.reload();
+            alert('You tried to access Superadmin\'s page while not logged in as admin. You have been returned to user\'s homepage.');
+        }
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('access_token');

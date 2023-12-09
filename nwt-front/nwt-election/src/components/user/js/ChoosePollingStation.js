@@ -8,7 +8,7 @@ function ChoosePSPage() {
     const [selectedStation, setSelectedStation] = useState('');
 
     useEffect(() => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
         const token = localStorage.getItem('access_token');
     
         fetch(`${BASE_URL}/pollingStations`, {
@@ -27,7 +27,7 @@ function ChoosePSPage() {
     }, []);
 
     const handleSubmit = async () => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
         const token = localStorage.getItem('access_token');
         
         const response = await fetch(`${BASE_URL}/users/pollingStation?name=${selectedStation}`, {

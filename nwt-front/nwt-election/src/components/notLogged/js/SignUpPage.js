@@ -1,13 +1,17 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import '../css/SignUpPage.css';
-import axios from 'axios';
 
 function SignUpPage() {
     const history = useHistory();
     const [selectedOption, setSelectedOption] = useState('');
     const inputNumber = useRef(null);
     const inputEmail = useRef(null);
+
+    useEffect(() => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+    }, []);
 
     function validateInput(input) {
         const id = input.id;
@@ -39,7 +43,7 @@ function SignUpPage() {
             const password = document.getElementById("password").value;
             const role = "USER"; // since role is always "USER"
 
-            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
             const response = await fetch(`${BASE_URL}/authentication/register`, { // replace with your API url
                 method: 'POST',
                 headers: {
@@ -66,25 +70,6 @@ function SignUpPage() {
                 console.error('Error:', response.status, response.statusText);
                 // handle other errors...
             }
-
-
-
-            /* if(response.ok) { // if HTTP status is 200-299
-                // get the response data
-                const data = await response.json();
-                localStorage.setItem('access_token',data.access_token)
-                localStorage.setItem('refresh_token',data.refresh_token)
-                // Rest of the registration processing code
-                history.push('/choose-pollingstation');
-            } else if(response.status === 409) { // if status is 409 Conflict
-                // handle email already existing...
-                const data = await response.json();
-                console.error('Error:', data.message);
-                alert(data.message);
-            } else {
-                console.error('Error:', response.status, response.statusText);
-                // handle other errors...
-            } */
         }
     };
 

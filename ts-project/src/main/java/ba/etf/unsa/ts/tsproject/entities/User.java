@@ -3,6 +3,9 @@ package ba.etf.unsa.ts.tsproject.entities;
 import ba.etf.unsa.ts.tsproject.token.Token;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +33,10 @@ public class User implements UserDetails {
     private String lastname;
 
 
+    @Email
     private String email;
+
+    @Size(min = 8, message = "Password must contain at least 8 characters.")
     private String password;
 
 

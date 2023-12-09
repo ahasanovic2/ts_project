@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import loginImage from '../../../images/login5.png';
 
 import {FiEye, FiEyeOff} from 'react-icons/fi';
@@ -6,7 +6,6 @@ import '../css/LoginPage.css'
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { useHistory } from 'react-router-dom';
-import encryptPassword from "../../common/Hashing";
 
 function LoginPage(props) {
 
@@ -16,12 +15,17 @@ function LoginPage(props) {
     const [error, setError] = useState(null);
     const history = useHistory();
 
+    useEffect(() => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+    }, []);
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
     const handleLogin = async () => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
         
         try {
             const response = await axios.post(`${BASE_URL}/authentication/login`, {
@@ -62,7 +66,7 @@ function LoginPage(props) {
                 }
             }
         } catch (error) {
-            if (error.response && error.response.status  === 404) {
+            if (error.response && (error.response.status  === 404 || error.response.status === 409)) {
                 setError(error.response.data.message);
             } else if (error.response && error.response.status === 400) {
                 localStorage.setItem('email', email);

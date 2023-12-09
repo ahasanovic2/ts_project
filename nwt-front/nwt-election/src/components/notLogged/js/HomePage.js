@@ -2,10 +2,10 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import '../css/HomePage.css';
 
-import backgroundImage from '../../../images/election-pic9-bl.jpg';
 import imageSrc from '../../../images/grb-bh.png'
 
 const HomePage = () => {
+
     const history = useHistory();
 
     return (

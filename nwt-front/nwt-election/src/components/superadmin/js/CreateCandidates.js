@@ -15,7 +15,7 @@ const SACreateCandidates = () => {
     const [elections, setElections] = useState([]);
 
     const fetchElections = async () => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
         const token = localStorage.getItem('access_token');
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
@@ -41,7 +41,7 @@ const SACreateCandidates = () => {
         }
     
         const token = localStorage.getItem('access_token');
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', `Bearer ${token}`);

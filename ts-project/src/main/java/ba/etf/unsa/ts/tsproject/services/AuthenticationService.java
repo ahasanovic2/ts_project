@@ -157,6 +157,22 @@ public class AuthenticationService {
         } else {
             return ResponseEntity.status(HttpStatus.OK).body("{\"status\": \"User is found and verified!\"}");
         }
-
     }
+
+    public ResponseEntity checkExpiration(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String stringToken = authHeader.substring(7);
+            Optional<Token> optionalToken = tokenRepository.findByToken(stringToken);
+            if (optionalToken == null || optionalToken.isEmpty())
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOTOK");
+            Token token = optionalToken.get();
+            if (token.expired || token.revoked)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOTOK");
+            return ResponseEntity.status(HttpStatus.OK).body("OK");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOTOK");
+    }
+
+
 }

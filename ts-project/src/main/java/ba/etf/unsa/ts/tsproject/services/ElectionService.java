@@ -38,8 +38,12 @@ public class ElectionService {
     private final PollingStationController pollingStationController;
     private final PollingStationService pollingStationService;
     private final VoteRepository voteRepository;
+    private final AuthenticationService authenticationService;
 
     public ResponseEntity<String> getVoteByElection(Integer electionId, Integer userId, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         Optional<Vote> optionalVote = voteRepository.getVoteByElectionIdAndAndVoterId(electionId,userId);
         if (optionalVote.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body("{\"hasVote\":false}");
@@ -70,7 +74,10 @@ public class ElectionService {
     }
 
 
-    public ResponseEntity getElections() {
+    public ResponseEntity getElections(HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         List<Election> elections = electionRepository.findAll();
         String json;
         try {
@@ -97,6 +104,9 @@ public class ElectionService {
     }
 
     public ResponseEntity createElection(Election election, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         redirectAttributes.addAttribute("electionId", election.getId());
         List<PollingStation> pollingStations = new ArrayList<>();
         for (PollingStation pollingStation: election.getPollingStations()) {
@@ -128,6 +138,9 @@ public class ElectionService {
     }
 
     public ResponseEntity<String> addLists(String name, List<Lista> liste, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         Optional<Election> optionalElection = electionRepository.getElectionByName(name);
         if (optionalElection.isEmpty()) {
             ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),"electionId","ELection ID not found");
@@ -142,6 +155,9 @@ public class ElectionService {
     }
 
     public ResponseEntity<String> getListsForElections(String name,HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         name = URLDecoder.decode(name,StandardCharsets.UTF_8);
         ResponseEntity<Integer> userId = getUserId(request);
         Optional<Election> optionalElection = electionRepository.getElectionByName(name);
@@ -163,6 +179,9 @@ public class ElectionService {
     }
 
     public ResponseEntity<String> addCandidates(String name, List<Candidate> candidates, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         Optional<Election> optionalElection = electionRepository.getElectionByName(name);
         if (optionalElection.isEmpty()) {
             ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),"electionId","ELection ID not found");
@@ -179,6 +198,9 @@ public class ElectionService {
     }
 
     public ResponseEntity<String> getCandidates(String name, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         ResponseEntity<Integer> userId = getUserId(request);
         Optional<Election> optionalElection = electionRepository.getElectionByName(name);
         if (optionalElection.isEmpty()) {
@@ -200,6 +222,9 @@ public class ElectionService {
     }
 
     public ResponseEntity<String> getPollingStations(String name, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         ResponseEntity<String> responseEntity = checkElectionExists(name);
         if (responseEntity != null) {
             return responseEntity;
@@ -209,6 +234,9 @@ public class ElectionService {
     }
 
     public ResponseEntity addElectionToPollingStations(String name, List<Integer> pollingStationIds, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         Optional<Election> optionalElection = electionRepository.getElectionByName(name);
         if (optionalElection.isEmpty()) {
             ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),"electionId","Election ID not found");
@@ -233,7 +261,10 @@ public class ElectionService {
         return userController.getId();
     }
 
-    public String getElectionsForUser(HttpServletRequest request) {
+    public ResponseEntity getElectionsForUser(HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         PollingStation pollingStation = (PollingStation) pollingStationController.getPollingStationForUser().getBody();
         List<Election> elections = electionRepository.findElectionsByPollingStationName(pollingStation.getName());
 
@@ -264,25 +295,27 @@ public class ElectionService {
         String jsonArray = String.join(", ", electionStrings);
         jsonArray = "[" + jsonArray + "]";
 
-        return jsonArray;
+        return ResponseEntity.status(HttpStatus.OK).body(jsonArray);
     }
 
 
     public ResponseEntity getElectionIdByName(String electionName, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         electionName = URLDecoder.decode(electionName,StandardCharsets.UTF_8);
         Optional<Election> optionalElection = electionRepository.getElectionByName(electionName);
         if (optionalElection.isEmpty()) {
             ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),"name","No election by that name");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails.toString());
         }
-        /*if (!optionalElection.get().getStatus().equals("Finished")) {
-            ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),"status","Election is not finished");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDetails.toString());
-        }*/
         return ResponseEntity.status(HttpStatus.OK).body(optionalElection.get().getId());
     }
 
     public ResponseEntity getCandidateIdByName(String firstName, String lastName, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         ResponseEntity<Integer> userId = getUserId(request);
         firstName = URLDecoder.decode(firstName,StandardCharsets.UTF_8);
         lastName = URLDecoder.decode(lastName,StandardCharsets.UTF_8);
@@ -295,6 +328,9 @@ public class ElectionService {
     }
 
     public ResponseEntity getListIdByName(String name, String electionName, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         electionName = URLDecoder.decode(electionName,StandardCharsets.UTF_8);
         ResponseEntity<Integer> userId = getUserId(request);
         name = URLDecoder.decode(name,StandardCharsets.UTF_8);
@@ -313,6 +349,9 @@ public class ElectionService {
     }
 
     public ResponseEntity getCandidateNameById(Integer candidateId, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         Optional<Candidate> optionalCandidate = candidateRepository.findById(candidateId);
         Integer userId = getUserId(request).getBody();
         if (optionalCandidate.isEmpty()) {
@@ -323,6 +362,9 @@ public class ElectionService {
     }
 
     public ResponseEntity getListById(Integer listId, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
         Optional<Lista> optionalLista = listaRepository.findById(listId);
         Integer userId = getUserId(request).getBody();
         if (optionalLista.isEmpty()) {
@@ -333,6 +375,11 @@ public class ElectionService {
     }
 
     public ResponseEntity getCandidateByName(String candidateFirstName, String candidateLastName, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
+
+
         Optional<Candidate> optionalCandidate = candidateRepository.getCandidateByFirstNameAndLastName(candidateFirstName,candidateLastName);
         Integer userId = getUserId(request).getBody();
         if (optionalCandidate.isEmpty()) {
@@ -343,6 +390,11 @@ public class ElectionService {
     }
 
     public ResponseEntity getListByName(String listaName, String electionName, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
+
+
         electionName = URLDecoder.decode(electionName,StandardCharsets.UTF_8);
         listaName = URLDecoder.decode(listaName,StandardCharsets.UTF_8);
         Integer userId = getUserId(request).getBody();
@@ -361,6 +413,11 @@ public class ElectionService {
     }
 
     public ResponseEntity getElectionById(Integer electionId, HttpServletRequest request) {
+        ResponseEntity checkExpiration = authenticationService.checkExpiration(request);
+        if (checkExpiration.getStatusCode() != HttpStatus.OK)
+            return checkExpiration;
+
+
         Optional<Election> optionalElection = electionRepository.findById(electionId);
         if (optionalElection.isEmpty()) {
             ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), "ID", "No election by that ID");

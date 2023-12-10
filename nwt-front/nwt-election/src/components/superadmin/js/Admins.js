@@ -3,19 +3,22 @@ import axios from "axios";
 import '../css/Admins.css';
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
+import { useHandleLogout, checkExpiration, RefreshToken } from "../../HelpFunctions";
 
 const SAAdmins = () => {
     
     const [admins, setAdmins] = useState([]); // State to store admin data
+    const handleLogout = useHandleLogout();
 
     const handleDelete = async (email) => {
+        checkExpiration(localStorage.getItem('access_token'), handleLogout);
         try {
             const isConfirmed = window.confirm("Are you sure you want to delete this admin?");
             if (!isConfirmed) {
                 return; // Do nothing if the user cancels
             }
 
-            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
             const token = localStorage.getItem('access_token');
     
             const response = await fetch(`${BASE_URL}/users/delete-admin?email=${email}`, {
@@ -38,8 +41,10 @@ const SAAdmins = () => {
     useEffect(() => {
         // Function to fetch admin data
         const fetchAdmins = async () => {
+            checkExpiration(localStorage.getItem('access_token'), handleLogout);
+
             try {
-                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
+                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
                 const token = localStorage.getItem('access_token');
         
                 const response = await fetch(`${BASE_URL}/users/admins`, {

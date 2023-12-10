@@ -1,12 +1,22 @@
 import React, {useEffect} from 'react';
 import { useHistory } from 'react-router-dom';
 import GetRole from "../../GetRole";
+import { useHandleLogout, checkExpiration, RefreshToken } from "../../HelpFunctions";
 
 const Header = () => {
     const history = useHistory();
+    const handleLogout = useHandleLogout();
 
     const handleSwitchTo = (path) => {
-        history.push(path);
+        checkExpiration(localStorage.getItem('access_token'), handleLogout);
+        // Check if the token is still in the local storage
+        if (localStorage.getItem('access_token')) {
+            history.push(path);
+        }
+    };
+
+    const handleRefreshToken = async () => {
+        await RefreshToken();
     };
 
     useEffect(() => {
@@ -21,12 +31,6 @@ const Header = () => {
             alert('You tried to access Admin\'s page while not logged in as admin. You have been returned to user\'s homepage.');
         }
     }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        history.push('/');
-    };
 
     return (
         <div className="header">
@@ -57,6 +61,10 @@ const Header = () => {
                     <span className='small-text'></span>
                 </button>
                 <button onClick={() => handleSwitchTo('/admin-users')}>Pregledaj korisnike
+                    <br/>
+                    <span className='small-text'></span>
+                </button>
+                <button onClick={() => handleRefreshToken()}>Obnovi sesiju
                     <br/>
                     <span className='small-text'></span>
                 </button>

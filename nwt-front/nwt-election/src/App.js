@@ -38,12 +38,15 @@ import Users from './components/admin/js/Users';
 import SAChangePassword from './components/superadmin/js/ChangePassword';
 import AChangePassword from './components/admin/js/ChangePassword';
 import ChangePassword from './components/user/js/ChangePassword';
+import {useHistory} from "react-router-dom";
 
 function App() {
+    const history = useHistory();
     const handleLogout = () => {
         // Don't forget to clear the access tokens when logging out
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        history.push("/home");
     };
 
     // Higher-order component for protected routes

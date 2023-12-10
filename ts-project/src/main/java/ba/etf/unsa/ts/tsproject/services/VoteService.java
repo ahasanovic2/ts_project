@@ -32,8 +32,8 @@ public class VoteService {
     }
 
     public ResponseEntity getElectionsForUser(HttpServletRequest request) {
-        String povrat = electionController.getElectionsForUser(request);
-        return ResponseEntity.status(HttpStatus.OK).body(povrat);
+        ResponseEntity povrat = electionController.getElectionsForUser(request);
+        return ResponseEntity.status(HttpStatus.OK).body(povrat.getBody());
     }
 
     public ResponseEntity<String> getListsForElection(String name, HttpServletRequest request) {

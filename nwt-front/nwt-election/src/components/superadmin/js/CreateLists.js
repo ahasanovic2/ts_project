@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import '../css/CreateLists.css';
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
+import { useHandleLogout, checkExpiration, RefreshToken } from "../../HelpFunctions";
 
 const SACreateLists = () => {
 
@@ -12,9 +13,10 @@ const SACreateLists = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [errorMessageDescription, setErrorMessageDescription] = useState("");
     const [elections, setElections] = useState([]);
+    const handleLogout = useHandleLogout()
 
     const fetchElections = async () => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
         const token = localStorage.getItem('access_token');
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
@@ -30,50 +32,54 @@ const SACreateLists = () => {
     }, []);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrorMessage("");
-        setErrorMessageDescription("");
-
-        if (description.length < 20) {
-            setErrorMessageDescription("Description must be at least 20 characters long");
-            return;
-        }
-    
-        const token = localStorage.getItem('access_token');
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', `Bearer ${token}`);
-    
-        const body = JSON.stringify([{
-            name,
-            description
-        }]);
-    
-        const response = await fetch(`${BASE_URL}/elections/election/add-lists?name=${electionName}`, {
-            method: 'POST',
-            headers,
-            body
-        });
-    
-        if (!response.ok) {
-            const errorData = await response.json();
-            // Check if errorData is an array or an object
-            if(Array.isArray(errorData)) {
-                // Handle array of errors
-                setErrorMessage(errorData[0].message);
-            } else {
-                // Handle single error object
-                setErrorMessage(errorData.message);
-            }
-        } else {
-            alert('Successfully added list');
+        checkExpiration(localStorage.getItem('access_token'), handleLogout);
+        if (localStorage.getItem('access_token')) {
+            e.preventDefault();
             setErrorMessage("");
-            // Reset the input fields except for election name
-            setName("");
-            setDescription("");
-    
+            setErrorMessageDescription("");
+
+            if (description.length < 20) {
+                setErrorMessageDescription("Description must be at least 20 characters long");
+                return;
+            }
+
+            const token = localStorage.getItem('access_token');
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+            const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            headers.append('Authorization', `Bearer ${token}`);
+
+            const body = JSON.stringify([{
+                name,
+                description
+            }]);
+
+            const response = await fetch(`${BASE_URL}/elections/election/add-lists?name=${electionName}`, {
+                method: 'POST',
+                headers,
+                body
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                // Check if errorData is an array or an object
+                if(Array.isArray(errorData)) {
+                    // Handle array of errors
+                    setErrorMessage(errorData[0].message);
+                } else {
+                    // Handle single error object
+                    setErrorMessage(errorData.message);
+                }
+            } else {
+                alert('Successfully added list');
+                setErrorMessage("");
+                // Reset the input fields except for election name
+                setName("");
+                setDescription("");
+
+            }
         }
+
     };
 
     const handleReset = () => {

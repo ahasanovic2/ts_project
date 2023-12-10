@@ -25,7 +25,7 @@ function LoginPage(props) {
     };
 
     const handleLogin = async () => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://44.218.241.227:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
         
         try {
             const response = await axios.post(`${BASE_URL}/authentication/login`, {

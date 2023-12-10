@@ -2,16 +2,22 @@
 import React, {useEffect, useState} from 'react';
 import { useHistory } from 'react-router-dom';
 import GetRole from "../../GetRole";
+import { useHandleLogout, checkExpiration, RefreshToken } from "../../HelpFunctions";
 
 const Header = ({voting}) => {
     const history = useHistory();
+    const handleLogout = useHandleLogout();
 
     const handleSwitchTo = (path) => {
-        if (voting === true) {
-            localStorage.removeItem('electionName');
+        checkExpiration(localStorage.getItem('access_token'), handleLogout);
+        // Check if the token is still in the local storage
+        if (localStorage.getItem('access_token')) {
+            history.push(path);
         }
+    };
 
-        history.push(path);
+    const handleRefreshToken = async () => {
+        await RefreshToken();
     };
 
     useEffect(() => {
@@ -26,12 +32,6 @@ const Header = ({voting}) => {
             alert('You tried to access User\'s page while not logged in as admin. You have been returned to superadmin\'s homepage.');
         }
     }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        history.push('/');
-    };
 
     const [showContactInfo, setShowContactInfo] = useState(false);
 
@@ -81,6 +81,10 @@ const Header = ({voting}) => {
                     <p>Broj telefona: 123-456-789</p>
                     <p>Email: info@eizbori.com</p>
                 </div>
+                <button onClick={() => handleRefreshToken()}>Obnovi sesiju
+                    <br/>
+                    <span className='small-text'></span>
+                </button>
                 <button onClick={() => handleSwitchTo('/change-password')}>Promijeni lozinku
                     <br/>
                 </button>

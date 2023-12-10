@@ -4,6 +4,7 @@ import ba.etf.unsa.ts.tsproject.entities.Candidate;
 import ba.etf.unsa.ts.tsproject.entities.Election;
 import ba.etf.unsa.ts.tsproject.entities.Lista;
 import ba.etf.unsa.ts.tsproject.services.ElectionService;
+import com.google.api.Http;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class ElectionController {
     private final ElectionService electionService;
 
     @GetMapping("")
-    public ResponseEntity getElections() {
-        return electionService.getElections();
+    public ResponseEntity getElections(HttpServletRequest request) {
+        return electionService.getElections(request);
     }
 
     @GetMapping("/get-election-by-id")
@@ -47,7 +48,7 @@ public class ElectionController {
     }
 
     @GetMapping("/get-elections-for-user")
-    public String getElectionsForUser(HttpServletRequest request) {
+    public ResponseEntity getElectionsForUser(HttpServletRequest request) {
         return electionService.getElectionsForUser(request);
     }
 

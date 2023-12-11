@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import '../css/ResultsHome.css'
 import { useHistory } from 'react-router-dom';
 import Header from './Header';
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 const ResultsHome = () => {
 
@@ -17,8 +18,10 @@ const ResultsHome = () => {
     const [error4, setError4] = useState('');
     const [error5, setError5] = useState('');
     const [error6, setError6] = useState('');
+    const handleLogout = useHandleLogout();
 
     const handleResultsOption = async (option) => {
+
         const token = localStorage.getItem('access_token');
         const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
         switch (option) {
@@ -183,21 +186,24 @@ const ResultsHome = () => {
     };
 
     const handleResults = async () => {
-        if (election && !list && !candidateFirstName && !candidateLastName && !pollingStation) {
-            await handleResultsOption(1); // Full results for election
-        } else if (election && !list && !candidateFirstName && !candidateLastName && pollingStation) {
-            await handleResultsOption(2); // Results for election at certain polling station
-        } else if (election && !list && candidateFirstName && candidateLastName && !pollingStation) {
-            await handleResultsOption(3); // Full results for one candidate at certain election
-        } else if (election && list && !candidateFirstName && !candidateLastName && !pollingStation) {
-            await handleResultsOption(4); // Full results for one list at certain election
-        } else if (election && !list && candidateFirstName && candidateLastName && pollingStation) {
-            await handleResultsOption(5); // Results for one candidate at certain election at certain polling station
-        } else if (election && list && !candidateFirstName && !candidateLastName && pollingStation) {
-            await handleResultsOption(6); // Results for one list at certain election at certain polling station
-        } else {
-            // Handle the case where input fields are not in any of the expected combinations
-            console.log("Invalid combination of input fields");
+        checkExpiration(localStorage.getItem('access_token'),handleLogout);
+        if (localStorage.getItem('access_token')) {
+            if (election && !list && !candidateFirstName && !candidateLastName && !pollingStation) {
+                await handleResultsOption(1); // Full results for election
+            } else if (election && !list && !candidateFirstName && !candidateLastName && pollingStation) {
+                await handleResultsOption(2); // Results for election at certain polling station
+            } else if (election && !list && candidateFirstName && candidateLastName && !pollingStation) {
+                await handleResultsOption(3); // Full results for one candidate at certain election
+            } else if (election && list && !candidateFirstName && !candidateLastName && !pollingStation) {
+                await handleResultsOption(4); // Full results for one list at certain election
+            } else if (election && !list && candidateFirstName && candidateLastName && pollingStation) {
+                await handleResultsOption(5); // Results for one candidate at certain election at certain polling station
+            } else if (election && list && !candidateFirstName && !candidateLastName && pollingStation) {
+                await handleResultsOption(6); // Results for one list at certain election at certain polling station
+            } else {
+                // Handle the case where input fields are not in any of the expected combinations
+                console.log("Invalid combination of input fields");
+            }
         }
     };
 

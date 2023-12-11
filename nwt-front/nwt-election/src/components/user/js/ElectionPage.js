@@ -5,11 +5,13 @@ import { useHistory } from 'react-router-dom';
 import { ElectionContext } from './ElectionContext';
 import moment from 'moment/moment';
 import Header from './Header';
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 const ElectionPage = () => {
     const [elections, setElections] = useState([]);
 
     const [selectedElection, setSelectedElection] = useState(null);
+    const handleLogout = useHandleLogout();
 
     useEffect(() => {
         const fetchElections = async () => {
@@ -35,17 +37,14 @@ const ElectionPage = () => {
     };
 
     const history = useHistory();
-
-    const handleLogout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        history.push('/');
-    };
     
     const handleSwitchToVotingPage = (election) => {
-        localStorage.setItem('electionName',election.name);
-        console.log("Election name is ", localStorage.getItem('electionName'));
-        history.push('/voting-page');
+        checkExpiration(localStorage.getItem('access_token'),handleLogout);
+        if (localStorage.getItem('access_token')) {
+            localStorage.setItem('electionName',election.name);
+            console.log("Election name is ", localStorage.getItem('electionName'));
+            history.push('/voting-page');
+        }
     };
 
     return (

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import '../css/ChoosePollingStation.css';
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 function ChoosePSPage() {
     const history = useHistory();
     const [pollingStations, setPollingStations] = useState([]);
     const [selectedStation, setSelectedStation] = useState('');
+    const handleLogout = useHandleLogout();
 
     useEffect(() => {
         const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
@@ -27,21 +29,24 @@ function ChoosePSPage() {
     }, []);
 
     const handleSubmit = async () => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
-        const token = localStorage.getItem('access_token');
-        
-        const response = await fetch(`${BASE_URL}/users/pollingStation?name=${selectedStation}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        checkExpiration(localStorage.getItem('access_token'),handleLogout);
+        if (localStorage.getItem('access_token')) {
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+            const token = localStorage.getItem('access_token');
 
-        if (response.ok) {
-            history.push('/landing');
-        } else {
-            console.error('Error:', response.status, response.statusText);
+            const response = await fetch(`${BASE_URL}/users/pollingStation?name=${selectedStation}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                history.push('/landing');
+            } else {
+                console.error('Error:', response.status, response.statusText);
+            }
         }
     };
 

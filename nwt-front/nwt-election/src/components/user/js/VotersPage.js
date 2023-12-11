@@ -4,14 +4,19 @@ import HowVoter from './HowVoter';
 import WhoVoter from './WhoVoter';
 import { useHistory, Switch, Route, useLocation } from 'react-router-dom';
 import Header from './Header';
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 const VotersPage = () => {
 
     const location = useLocation();
     const history = useHistory();
+    const handleLogout = useHandleLogout();
 
     const handleButtonClick = (route) => {
-        history.push(`/voters/${route}`);
+        checkExpiration(localStorage.getItem('access_token'),handleLogout);
+        if (localStorage.getItem('access_token')) {
+            history.push(`/voters/${route}`);
+        }
     };
 
     return (

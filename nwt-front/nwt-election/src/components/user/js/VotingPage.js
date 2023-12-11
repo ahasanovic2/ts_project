@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { ElectionContext } from './ElectionContext';
 import axios from 'axios';
 import Header from './Header';
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 function Candidate({ candidate, selectedVote, setSelectedVote }) {
     const handleClick = () => {
@@ -47,33 +48,36 @@ function VotingPage({ candidates, lists, selectedVote, setSelectedVote, clearSel
     const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
     const token = localStorage.getItem('access_token');
     const history = useHistory();
+    const handleLogout = useHandleLogout();
 
     const handleSubmit = async () => {
-        // Validation checks
 
-        if (!selectedVote) {
-            alert('You need to select a candidate or a list before voting.');
-            return;
-        }
-
-        try {
-            if (selectedVote.type === 'candidate') {
-                const { firstName, lastName } = selectedVote.data;
-                const url = `${BASE_URL}/voting/vote-for-candidate?electionName=${localStorage.getItem('electionName')}&firstName=${firstName}&lastName=${lastName}`;
-                await axios.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
-                alert('Your vote for candidate has been casted!');
-            } else if (selectedVote.type === 'list') {
-                const { name } = selectedVote.data;
-                const url = `${BASE_URL}/voting/vote-for-list?electionName=${localStorage.getItem('electionName')}&name=${name}`;
-                await axios.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
-                alert('Your vote for list has been casted!');
+        checkExpiration(localStorage.getItem('access_token'),handleLogout);
+        if (localStorage.getItem('access_token')) {
+            if (!selectedVote) {
+                alert('You need to select a candidate or a list before voting.');
+                return;
             }
 
-            clearSelection();  // Reset selection
-            history.push(`/landing`);
-        } catch (error) {
-            console.error('Failed to cast vote:', error);
-            alert('Failed to cast vote. Please try again.');
+            try {
+                if (selectedVote.type === 'candidate') {
+                    const { firstName, lastName } = selectedVote.data;
+                    const url = `${BASE_URL}/voting/vote-for-candidate?electionName=${localStorage.getItem('electionName')}&firstName=${firstName}&lastName=${lastName}`;
+                    await axios.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
+                    alert('Your vote for candidate has been casted!');
+                } else if (selectedVote.type === 'list') {
+                    const { name } = selectedVote.data;
+                    const url = `${BASE_URL}/voting/vote-for-list?electionName=${localStorage.getItem('electionName')}&name=${name}`;
+                    await axios.post(url, {}, { headers: { Authorization: `Bearer ${token}` } });
+                    alert('Your vote for list has been casted!');
+                }
+
+                clearSelection();  // Reset selection
+                history.push(`/landing`);
+            } catch (error) {
+                console.error('Failed to cast vote:', error);
+                alert('Failed to cast vote. Please try again.');
+            }
         }
     };
 

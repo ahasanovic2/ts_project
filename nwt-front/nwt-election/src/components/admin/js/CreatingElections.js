@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Header from "./Header";
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 
 const CreatingElections = () => {
@@ -15,54 +16,58 @@ const CreatingElections = () => {
     const [errorMessageTime, setErrorMessageTime] = useState("");
     const [errorMessageDescription, setErrorMessageDescription] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const handleLogout = useHandleLogout();
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrorMessageDescription("");
-        setErrorMessageTime("");
+        checkExpiration(localStorage.getItem('access_token'),handleLogout);
+        if (localStorage.getItem('access_token')) {
+            e.preventDefault();
+            setErrorMessageDescription("");
+            setErrorMessageTime("");
 
-        if (description.length < 20) {
-            setErrorMessageDescription("Description must be at least 20 characters long");
-            return;
-        }
-        if (startTime >= endTime) {
-            setErrorMessageTime("Start time cannot be after end time");
-            return;
-        }
+            if (description.length < 20) {
+                setErrorMessageDescription("Description must be at least 20 characters long");
+                return;
+            }
+            if (startTime >= endTime) {
+                setErrorMessageTime("Start time cannot be after end time");
+                return;
+            }
 
-        setErrorMessageDescription("");
-        setErrorMessageTime("");
-        
-        // Prepare request
-        const token = localStorage.getItem('access_token');
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', `Bearer ${token}`);
-    
-        const body = JSON.stringify({
-            name,
-            description,
-            startTime: startTime.toISOString(),
-            endTime: endTime.toISOString()
-        });
-    
-        // Send request
-        const response = await fetch(`${BASE_URL}/elections/create`, {
-            method: 'POST',
-            headers,
-            body
-        });
-    
-        // Handle response
-        if (!response.ok) {
-            const errorData = await response.json();
-            setErrorMessage(errorData[0].message);
-            alert('Something went wrong');
-        } else {
-            alert('Successfuly added elections');
-            setErrorMessage(""); // Clear the error message upon successful request
-            history.push('/admin-landing');
+            setErrorMessageDescription("");
+            setErrorMessageTime("");
+
+            // Prepare request
+            const token = localStorage.getItem('access_token');
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+            const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            headers.append('Authorization', `Bearer ${token}`);
+
+            const body = JSON.stringify({
+                name,
+                description,
+                startTime: startTime.toISOString(),
+                endTime: endTime.toISOString()
+            });
+
+            // Send request
+            const response = await fetch(`${BASE_URL}/elections/create`, {
+                method: 'POST',
+                headers,
+                body
+            });
+
+            // Handle response
+            if (!response.ok) {
+                const errorData = await response.json();
+                setErrorMessage(errorData[0].message);
+                alert('Something went wrong');
+            } else {
+                alert('Successfuly added elections');
+                setErrorMessage(""); // Clear the error message upon successful request
+                history.push('/admin-landing');
+            }
         }
     };
 

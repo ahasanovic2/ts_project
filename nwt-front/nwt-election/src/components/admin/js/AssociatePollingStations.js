@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import '../css/AssociatePollingStations.css';
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 const AssociatePollingStations = () => {
     useHistory();
@@ -10,6 +11,7 @@ const AssociatePollingStations = () => {
     const [selectedElection, setSelectedElection] = useState("");
     const [selectedPollingStations, setSelectedPollingStations] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
+    const handleLogout = useHandleLogout();
 
     const fetchElections = async () => {
         const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
@@ -49,29 +51,33 @@ const AssociatePollingStations = () => {
     };    
     
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:8080';
-        const token = localStorage.getItem('access_token');
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', `Bearer ${token}`);
+        checkExpiration(localStorage.getItem('access_token'),handleLogout);
+        if (localStorage.getItem('access_token')) {
 
-        const body = JSON.stringify(selectedPollingStations);
-        console.log(body);
-        const response = await fetch(`${BASE_URL}/elections/election/set-pollingstations?name=${selectedElection}`, {
-            method: 'POST',
-            headers,
-            body
-        });
+            e.preventDefault();
+            const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:8080';
+            const token = localStorage.getItem('access_token');
+            const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            headers.append('Authorization', `Bearer ${token}`);
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            setErrorMessage(errorData.message);
-        } else {
-            alert('Successfully added polling stations to election');
-            setErrorMessage("");
-            setSelectedElection("");
-            setSelectedPollingStations([]);
+            const body = JSON.stringify(selectedPollingStations);
+            console.log(body);
+            const response = await fetch(`${BASE_URL}/elections/election/set-pollingstations?name=${selectedElection}`, {
+                method: 'POST',
+                headers,
+                body
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                setErrorMessage(errorData.message);
+            } else {
+                alert('Successfully added polling stations to election');
+                setErrorMessage("");
+                setSelectedElection("");
+                setSelectedPollingStations([]);
+            }
         }
     };
 

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import '../css/CreatingPollingStations.css';
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 const CreatingPollingStations = () => {
     const history = useHistory();
@@ -11,46 +12,50 @@ const CreatingPollingStations = () => {
     const [kanton, setKanton] = useState("Unsko Sanski");
     const [entitet, setEntitet] = useState("FederacijaBiH");
     const [errorMessage, setErrorMessage] = useState("");
+    const handleLogout = useHandleLogout();
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrorMessage("");
-
-        const token = localStorage.getItem('access_token');
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
-        const headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('Authorization', `Bearer ${token}`);
-    
-        const body = JSON.stringify({
-            name,
-            address,
-            opcina,
-            kanton: entitet === 'FederacijaBiH' ? kanton : undefined,
-            entitet
-        });
-    
-        const response = await fetch(`${BASE_URL}/auth-service/pollingStations/create`, {
-            method: 'POST',
-            headers,
-            body
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            if(Array.isArray(errorData)) {
-                setErrorMessage(errorData[0].message);
-            } else {
-                setErrorMessage(errorData.message);
-            }
-        } else {
-            alert('Successfully added polling station');
+        checkExpiration(localStorage.getItem('access_token'),handleLogout);
+        if (localStorage.getItem('access_token')) {
+            e.preventDefault();
             setErrorMessage("");
-            setName("");
-            setAddress("");
-            setOpcina("");
-            setKanton("Unsko Sanski");
-            setEntitet("FederacijaBiH");
+
+            const token = localStorage.getItem('access_token');
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+            const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+            headers.append('Authorization', `Bearer ${token}`);
+
+            const body = JSON.stringify({
+                name,
+                address,
+                opcina,
+                kanton: entitet === 'FederacijaBiH' ? kanton : undefined,
+                entitet
+            });
+
+            const response = await fetch(`${BASE_URL}/auth-service/pollingStations/create`, {
+                method: 'POST',
+                headers,
+                body
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                if(Array.isArray(errorData)) {
+                    setErrorMessage(errorData[0].message);
+                } else {
+                    setErrorMessage(errorData.message);
+                }
+            } else {
+                alert('Successfully added polling station');
+                setErrorMessage("");
+                setName("");
+                setAddress("");
+                setOpcina("");
+                setKanton("Unsko Sanski");
+                setEntitet("FederacijaBiH");
+            }
         }
     };
 

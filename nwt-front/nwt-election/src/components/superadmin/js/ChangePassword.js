@@ -1,75 +1,77 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import '../css/ChangePassword.css';
-import { useHistory } from "react-router-dom";
 import Header from "./Header";
-import axios from "axios";
+import {checkExpiration, useHandleLogout} from "../../HelpFunctions";
 
 const SAChangePassword = () => {
-    const history = useHistory();
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const handleLogout = useHandleLogout();
 
-
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
 
     const handleSubmit = async (e) => {
-        try {
-            e.preventDefault();
-            setErrorMessage("");
-        
-            const token = localStorage.getItem('access_token');
-            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
-            const headers = new Headers();
-            headers.append('Content-Type', 'application/json');
-            headers.append('Authorization', `Bearer ${token}`);
-        
-            const body = JSON.stringify({
-                oldPassword,
-                newPassword
-            });
+        checkExpiration(localStorage.getItem('access_token'), handleLogout);
+        if (localStorage.getItem('access_token')) {
 
-            const response = await fetch(`${BASE_URL}/users/change-password`, {
-                method: "PUT",
-                headers,
-                body
-            });
-        
-            if (!response.ok) {
-                const errorData = await response.json();
-                // Check if errorData is an array or an object
-                if(Array.isArray(errorData)) {
+            try {
+                e.preventDefault();
+                setErrorMessage("");
+
+                const token = localStorage.getItem('access_token');
+                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+                const headers = new Headers();
+                headers.append('Content-Type', 'application/json');
+                headers.append('Authorization', `Bearer ${token}`);
+
+                const body = JSON.stringify({
+                    oldPassword,
+                    newPassword
+                });
+
+                const response = await fetch(`${BASE_URL}/users/change-password`, {
+                    method: "PUT",
+                    headers,
+                    body
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    // Check if errorData is an array or an object
+                    if(Array.isArray(errorData)) {
+                        // Handle array of errors
+                        setErrorMessage(errorData[0].message);
+                    } else {
+                        // Handle single error object
+                        setErrorMessage(errorData.message);
+                    }
+                } else {
+                    alert('Successfully changed password');
+                    setOldPassword("");
+                    setNewPassword("");
+                    setErrorMessage("");
+                }
+            }
+            catch (error) {
+                if(Array.isArray(error)) {
                     // Handle array of errors
-                    setErrorMessage(errorData[0].message);
+                    setErrorMessage(error[0].message);
                 } else {
                     // Handle single error object
-                    setErrorMessage(errorData.message);
+                    setErrorMessage(error.message);
                 }
-            } else {
-                alert('Successfully changed password');
-                setOldPassword("");
-                setNewPassword("");
-                setErrorMessage("");
-            }
-        }
-        catch (error) {
-            if(Array.isArray(error)) {
-                // Handle array of errors
-                setErrorMessage(error[0].message);
-            } else {
-                // Handle single error object
-                setErrorMessage(error.message);
             }
         }
     };
 
     const handleReset = () => {
-        setOldPassword("");
-        setNewPassword("");
-        setErrorMessage("");
+        checkExpiration(localStorage.getItem('access_token'), handleLogout);
+        if (localStorage.getItem('access_token')) {
+            setOldPassword("");
+            setNewPassword("");
+            setErrorMessage("");
+        }
     };
 
     

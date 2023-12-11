@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import '../css/CreateLists.css';
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
-import { useHandleLogout, checkExpiration, RefreshToken } from "../../HelpFunctions";
+import { useHandleLogout, checkExpiration } from "../../HelpFunctions";
 
 const SACreateLists = () => {
 
@@ -83,11 +83,14 @@ const SACreateLists = () => {
     };
 
     const handleReset = () => {
-        setElectionName("");
-        setName("");
-        setDescription("");
-        setErrorMessage("");
-        setErrorMessageDescription("");
+        checkExpiration(localStorage.getItem('access_token'), handleLogout);
+        if (localStorage.getItem('access_token')) {
+            setElectionName("");
+            setName("");
+            setDescription("");
+            setErrorMessage("");
+            setErrorMessageDescription("");
+        }
     };
     
 

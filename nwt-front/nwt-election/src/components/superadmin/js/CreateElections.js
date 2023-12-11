@@ -66,7 +66,6 @@ const SACreatingElections = () => {
                 setErrorMessage(""); // Clear the error message upon successful request
                 history.push('/superadmin-home');
             }
-            await RefreshToken;
         }
     };
 

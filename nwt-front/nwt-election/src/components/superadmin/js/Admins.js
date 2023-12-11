@@ -12,29 +12,31 @@ const SAAdmins = () => {
 
     const handleDelete = async (email) => {
         checkExpiration(localStorage.getItem('access_token'), handleLogout);
-        try {
-            const isConfirmed = window.confirm("Are you sure you want to delete this admin?");
-            if (!isConfirmed) {
-                return; // Do nothing if the user cancels
-            }
-
-            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
-            const token = localStorage.getItem('access_token');
-    
-            const response = await fetch(`${BASE_URL}/users/delete-admin?email=${email}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+        if (localStorage.getItem('access_token')) {
+            try {
+                const isConfirmed = window.confirm("Are you sure you want to delete this admin?");
+                if (!isConfirmed) {
+                    return; // Do nothing if the user cancels
                 }
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+
+                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+                const token = localStorage.getItem('access_token');
+
+                const response = await fetch(`${BASE_URL}/users/delete-admin?email=${email}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                setAdmins(currentAdmins => currentAdmins.filter(admin => admin.email !== email));
             }
-            setAdmins(currentAdmins => currentAdmins.filter(admin => admin.email !== email));
-        }
-        catch (error) {
-            console.error("Error fetching admin data:", error);
+            catch (error) {
+                console.error("Error fetching admin data:", error);
+            }
         }
     };
 

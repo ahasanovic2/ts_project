@@ -56,6 +56,8 @@ public class SecurityConfiguration {
                 .requestMatchers(POST, "/users/pollingStation/{pollingStationId}").hasAnyRole(USER.name(), SUPERADMIN.name())
                 .requestMatchers(POST, "/users/pollingStation").hasAnyRole(USER.name(), SUPERADMIN.name())
                 .requestMatchers(GET,"/users/id").hasAnyRole(USER.name(), ADMIN.name(), SUPERADMIN.name())
+                .requestMatchers(POST,"/users/front-logout").hasAnyRole(USER.name(), ADMIN.name(), SUPERADMIN.name())
+                .requestMatchers(POST,"/users/reset-password").permitAll()
                 .requestMatchers("/users/**").denyAll()
                 .requestMatchers(GET,"/voting/elections").hasAnyRole("ADMIN","USER", SUPERADMIN.name())
                 .requestMatchers(GET,"/voting/election/get-lists").hasAnyRole("ADMIN","USER", SUPERADMIN.name())

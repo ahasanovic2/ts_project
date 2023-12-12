@@ -26,7 +26,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenRepository tokenRepository;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().contains("/api/v1/auth")) {
+        if (request.getServletPath().equals("/authentication/logout")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        // Bypass filter for OPTIONS requests (CORS pre-flight)
+        if (request.getMethod().equals("OPTIONS")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        // Bypass filter for the logout endpoint
+        if (request.getServletPath().equals("/authentication/logout")) {
             filterChain.doFilter(request, response);
             return;
         }

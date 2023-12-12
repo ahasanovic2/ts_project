@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -173,6 +174,4 @@ public class AuthenticationService {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOTOK");
     }
-
-
 }

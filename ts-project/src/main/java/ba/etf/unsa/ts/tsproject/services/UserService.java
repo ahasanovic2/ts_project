@@ -4,19 +4,16 @@ import ba.etf.unsa.ts.tsproject.auth.RegisterRequest;
 import ba.etf.unsa.ts.tsproject.authconfig.JwtService;
 import ba.etf.unsa.ts.tsproject.entities.*;
 import ba.etf.unsa.ts.tsproject.exception.ErrorDetails;
+import ba.etf.unsa.ts.tsproject.repositories.PasswordResetTokenRepository;
 import ba.etf.unsa.ts.tsproject.repositories.PollingStationRepository;
 import ba.etf.unsa.ts.tsproject.repositories.UserRepository;
 import ba.etf.unsa.ts.tsproject.repositories.VerificationTokenRepository;
 import ba.etf.unsa.ts.tsproject.token.Token;
 import ba.etf.unsa.ts.tsproject.token.TokenRepository;
 import ba.etf.unsa.ts.tsproject.token.TokenType;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,6 +36,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     public ResponseEntity<String> setPollingStation(Integer userId, Integer pollingStationId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -155,5 +153,24 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
         userRepository.save(user);
         return ResponseEntity.status(HttpStatus.OK).body("{\"status\": \"success\", \"message\": \"Successfully changed password to user\"}");
+    }
+
+    public void createPasswordResetTokenForUser(User user, String token) {
+        PasswordResetToken myToken = new PasswordResetToken(token, user);
+        passwordResetTokenRepository.save(myToken);
+    }
+
+    public ResponseEntity frontLogout(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser == null || optionalUser.isEmpty())
+            return ResponseEntity.status(404).body(new ErrorDetails(LocalDateTime.now(), "email", "No user found by that email"));
+        User user = optionalUser.get();
+        List<Token> tokens = user.getTokens();
+        for (var token: tokens) {
+            token.setExpired(true);
+            token.setRevoked(true);
+        }
+        userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.OK).body("{\"status\":\"Success\"}");
     }
 }

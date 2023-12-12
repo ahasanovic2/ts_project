@@ -71,4 +71,8 @@ public class EmailSenderService implements ApplicationListener<RegistrationCompl
         messageHelper.setText(mailContent, true);
         mailSender.send(message);
     }
+
+    public void sendResetToken(String url) {
+
+    }
 }

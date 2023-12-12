@@ -2,21 +2,26 @@ package ba.etf.unsa.ts.tsproject.controllers;
 
 import ba.etf.unsa.ts.tsproject.auth.RegisterRequest;
 import ba.etf.unsa.ts.tsproject.email.RegistrationCompleteEvent;
-import ba.etf.unsa.ts.tsproject.entities.Passwords;
-import ba.etf.unsa.ts.tsproject.entities.PollingStation;
-import ba.etf.unsa.ts.tsproject.entities.User;
+import ba.etf.unsa.ts.tsproject.entities.*;
 import ba.etf.unsa.ts.tsproject.repositories.PollingStationRepository;
 import ba.etf.unsa.ts.tsproject.repositories.UserRepository;
 import ba.etf.unsa.ts.tsproject.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -27,6 +32,9 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final PollingStationRepository pollingStationRepository;
+    private final MessageSource messages;
+    private final JavaMailSender mailSender;
+    private final Environment env;
 
     @GetMapping("")
     public ResponseEntity getUsers() {
@@ -94,6 +102,11 @@ public class UserController {
     @PutMapping("/change-password")
     public ResponseEntity changePassword(@RequestBody Passwords passwords) {
         return userService.changePassword(passwords);
+    }
+
+    @PostMapping("/front-logout")
+    public ResponseEntity frontLogout(@RequestParam String email) {
+        return userService.frontLogout(email);
     }
 
     private String applicationUrl(HttpServletRequest request) {

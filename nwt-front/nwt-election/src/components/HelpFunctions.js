@@ -5,6 +5,15 @@ export const useHandleLogout = () => {
     const history = useHistory();
 
     return () => {
+        const token = localStorage.getItem('access_token');
+        const decoded = jwtDecode(token)
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', `Bearer ${token}`);
+        const response = fetch(`http://localhost:8080/users/front-logout?email=${decoded.sub}`, {
+            method: 'POST',
+            headers
+        })
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         history.push("/home");

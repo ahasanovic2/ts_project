@@ -69,6 +69,8 @@ public class AuthenticationController {
         return authenticationService.checkValidation(email,request);
     }
 
+
+
     private String applicationUrl(HttpServletRequest request) {
         return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
     }

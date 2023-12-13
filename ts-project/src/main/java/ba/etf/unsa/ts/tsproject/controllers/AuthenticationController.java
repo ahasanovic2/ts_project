@@ -5,6 +5,7 @@ import ba.etf.unsa.ts.tsproject.auth.RegisterRequest;
 import ba.etf.unsa.ts.tsproject.email.RegistrationCompleteEvent;
 import ba.etf.unsa.ts.tsproject.entities.User;
 import ba.etf.unsa.ts.tsproject.entities.VerificationToken;
+import ba.etf.unsa.ts.tsproject.repositories.UserRepository;
 import ba.etf.unsa.ts.tsproject.repositories.VerificationTokenRepository;
 import ba.etf.unsa.ts.tsproject.services.AuthenticationService;
 import ba.etf.unsa.ts.tsproject.services.UserService;
@@ -16,6 +17,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
@@ -32,6 +34,8 @@ public class AuthenticationController {
     private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository verificationTokenRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
 
@@ -66,9 +70,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> setPassword(@RequestParam String email, @RequestHeader String newPassword){
-        return new ResponseEntity<>(authenticationService.setPassword(email, newPassword), HttpStatus.OK);
+    public ResponseEntity<String> resetPassword(@RequestParam String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found" + email));
+        return new ResponseEntity<>(authenticationService.forgotPassword(email), HttpStatus.OK);
     }
+
 
 
     @GetMapping("/verifyEmail")

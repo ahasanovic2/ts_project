@@ -29,6 +29,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -183,22 +185,27 @@ public class AuthenticationService {
 
 
     public String forgotPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found" + email));
 
-        userRepository.findByEmail(email)
-                .orElseThrow(
-                    () -> new RuntimeException("User not found" + email)
-                );
+        // Generate a one-time password
+        SecureRandom random = new SecureRandom();
+        String oneTimePassword = new BigInteger(50, random).toString(32);
+
+        // Encode and store the one-time password in the database
+        String encodedOneTimePassword = passwordEncoder.encode(oneTimePassword);
+        user.setPassword(encodedOneTimePassword);
+        userRepository.save(user);
+
         try {
-            emailSenderService.sendSetPasswordEmail(email);
+            emailSenderService.sendSetPasswordEmail(email, oneTimePassword);
         } catch (MessagingException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        return "Please check your email to set new password!";
 
-
-
-
+        return "Please check your email to set a new password!";
     }
+
     public String setPassword(String email, String newPassword) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found" + email));

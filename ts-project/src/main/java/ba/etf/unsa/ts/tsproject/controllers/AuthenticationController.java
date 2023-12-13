@@ -11,9 +11,11 @@ import ba.etf.unsa.ts.tsproject.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
@@ -30,6 +32,8 @@ public class AuthenticationController {
     private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository verificationTokenRepository;
     private final UserService userService;
+
+
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterRequest registerRequest, final HttpServletRequest request) {
@@ -59,6 +63,11 @@ public class AuthenticationController {
     public ResponseEntity<String> forgotPassword(@RequestParam Map<String, String> request){
         String email = request.get("email");
         return new ResponseEntity<>(authenticationService.forgotPassword(email), HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> setPassword(@RequestParam String email, @RequestHeader String newPassword){
+        return new ResponseEntity<>(authenticationService.setPassword(email, newPassword), HttpStatus.OK);
     }
 
 

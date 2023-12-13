@@ -17,11 +17,13 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -196,5 +198,18 @@ public class AuthenticationService {
 
 
 
+    }
+    public String setPassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found" + email));
+
+        // Encode the new password using BCrypt
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
+        // Set the encoded password
+        user.setPassword(encodedPassword);
+
+        userRepository.save(user);
+        return "Password successfully updated!";
     }
 }

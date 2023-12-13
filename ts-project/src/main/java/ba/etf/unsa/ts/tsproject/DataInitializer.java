@@ -23,7 +23,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        //fill();
+        fill();
     }
     private void fill() {
         RegisterRequest admin = createSuperAdmin("Ahmedin", "Hasanovic", "ahasanovic2@etf.unsa.ba", "sifra123");

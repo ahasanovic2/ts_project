@@ -4,6 +4,7 @@ import ba.etf.unsa.ts.tsproject.auth.AuthenticationRequest;
 import ba.etf.unsa.ts.tsproject.auth.AuthenticationResponse;
 import ba.etf.unsa.ts.tsproject.auth.RegisterRequest;
 import ba.etf.unsa.ts.tsproject.authconfig.JwtService;
+import ba.etf.unsa.ts.tsproject.email.EmailSenderService;
 import ba.etf.unsa.ts.tsproject.entities.Role;
 import ba.etf.unsa.ts.tsproject.entities.User;
 import ba.etf.unsa.ts.tsproject.exception.ErrorDetails;
@@ -12,6 +13,7 @@ import ba.etf.unsa.ts.tsproject.token.Token;
 import ba.etf.unsa.ts.tsproject.token.TokenRepository;
 import ba.etf.unsa.ts.tsproject.token.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,6 +39,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final EmailSenderService emailSenderService;
     private final TokenRepository tokenRepository;
 
     public ResponseEntity register(RegisterRequest request) {
@@ -173,5 +177,24 @@ public class AuthenticationService {
             return ResponseEntity.status(HttpStatus.OK).body("OK");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("NOTOK");
+    }
+
+
+    public String forgotPassword(String email) {
+
+        userRepository.findByEmail(email)
+                .orElseThrow(
+                    () -> new RuntimeException("User not found" + email)
+                );
+        try {
+            emailSenderService.sendSetPasswordEmail(email);
+        } catch (MessagingException | UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        return "Please check your email to set new password!";
+
+
+
+
     }
 }

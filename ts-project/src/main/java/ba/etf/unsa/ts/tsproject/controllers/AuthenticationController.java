@@ -12,10 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/authentication")
@@ -50,6 +53,14 @@ public class AuthenticationController {
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         authenticationService.refreshToken(request, response);
     }
+
+    @PermitAll
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam Map<String, String> request){
+        String email = request.get("email");
+        return new ResponseEntity<>(authenticationService.forgotPassword(email), HttpStatus.OK);
+    }
+
 
     @GetMapping("/verifyEmail")
     public String verifyEmail(@RequestParam("token") String token){

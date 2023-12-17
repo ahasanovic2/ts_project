@@ -26,8 +26,8 @@ public class DataInitializer implements CommandLineRunner {
         fill();
     }
     private void fill() {
-        RegisterRequest admin = createSuperAdmin("Ahmedin", "Hasanovic", "ahasanovic2@etf.unsa.ba", "sifra123");
-        RegisterRequest admin2 = createSuperAdmin("Vedad", "Dervisevic", "vdervisevi1@etf.unsa.ba", "sifra456");
+        RegisterRequest admin = createSuperAdmin("Ahmedin", "Hasanovic", "ahasanovic2@etf.unsa.ba", "Sifra123");
+        RegisterRequest admin2 = createSuperAdmin("Vedad", "Dervisevic", "vdervisevi1@etf.unsa.ba", "Sifra456");
 
         authenticationService.register(admin);
         authenticationService.register(admin2);

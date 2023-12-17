@@ -74,21 +74,25 @@ public class UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDetails(LocalDateTime.now(),"email","Email already present in database"));
         }
-        var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .isEnabled(false)
-                .role(request.getRole())
-                .build();
-        if (user.getRole() == Role.SUPERADMIN)
-            user.setIsEnabled(true);
-        var savedUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
-        return ResponseEntity.ok(user);
+
+
+
+            var user = User.builder()
+                    .firstname(request.getFirstname())
+                    .lastname(request.getLastname())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .isEnabled(false)
+                    .role(request.getRole())
+                    .build();
+            if (user.getRole() == Role.SUPERADMIN)
+                user.setIsEnabled(true);
+            var savedUser = userRepository.save(user);
+            var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+            saveUserToken(savedUser, jwtToken);
+            return ResponseEntity.ok(user);
+
     }
 
     private void saveUserToken(User savedUser, String jwtToken) {

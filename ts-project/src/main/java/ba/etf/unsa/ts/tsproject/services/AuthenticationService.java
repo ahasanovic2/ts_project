@@ -55,21 +55,27 @@ public class AuthenticationService {
         }
         if (request.getRole() == Role.ADMIN)
             return ResponseEntity.status((HttpStatus.CONFLICT)).body(new ErrorDetails(LocalDateTime.now(),"role","Only superadmin can add admin"));
-        var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .isEnabled(false)
-                .role(request.getRole())
-                .build();
-        if (user.getRole() == Role.SUPERADMIN)
-            user.setIsEnabled(true);
-        var savedUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(savedUser, jwtToken);
-        return ResponseEntity.ok(user);
+        if(request.getPassword().matches(".*[A-Z].*") && request.getPassword().matches(".*[a-z].*") && request.getPassword().matches(".*\\d.*") && request.getPassword().length()>=8) {
+            var user = User.builder()
+                    .firstname(request.getFirstname())
+                    .lastname(request.getLastname())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .isEnabled(false)
+                    .role(request.getRole())
+                    .build();
+            if (user.getRole() == Role.SUPERADMIN)
+                user.setIsEnabled(true);
+            var savedUser = userRepository.save(user);
+            var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+            saveUserToken(savedUser, jwtToken);
+            return ResponseEntity.ok(user);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDetails(LocalDateTime.now(),"password","Password must contain at least one uppercase symbol, one lowercase symbol, one number and password must be at least 8 characters long"));
+        }
+
     }
 
 

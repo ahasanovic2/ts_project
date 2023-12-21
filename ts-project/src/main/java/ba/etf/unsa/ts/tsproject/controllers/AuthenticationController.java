@@ -69,14 +69,6 @@ public class AuthenticationController {
         return new ResponseEntity<>(authenticationService.forgotPassword(email), HttpStatus.OK);
     }
 
-    @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found" + email));
-        return new ResponseEntity<>(authenticationService.forgotPassword(email), HttpStatus.OK);
-    }
-
-
 
     @GetMapping("/verifyEmail")
     public String verifyEmail(@RequestParam("token") String token){

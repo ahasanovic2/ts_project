@@ -212,17 +212,4 @@ public class AuthenticationService {
         return "Please check your email to set a new password!";
     }
 
-    public String setPassword(String email, String newPassword) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found" + email));
-
-        // Encode the new password using BCrypt
-        String encodedPassword = passwordEncoder.encode(newPassword);
-
-        // Set the encoded password
-        user.setPassword(encodedPassword);
-
-        userRepository.save(user);
-        return "Password successfully updated!";
-    }
 }

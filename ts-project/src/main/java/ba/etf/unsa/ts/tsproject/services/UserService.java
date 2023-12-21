@@ -154,9 +154,12 @@ public class UserService {
         User user = optionalUser.get();
         if (!passwordEncoder.matches(passwords.getOldPassword(),user.getPassword()))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDetails(LocalDateTime.now(), "password","Old password is not correct"));
-        user.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body("{\"status\": \"success\", \"message\": \"Successfully changed password to user\"}");
+        if(passwords.getNewPassword().matches(".*[A-Z].*") && passwords.getNewPassword().matches(".*[a-z].*") && passwords.getNewPassword().matches(".*\\d.*") && passwords.getNewPassword().length()>=8) {
+                user.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
+                userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body("{\"status\": \"success\", \"message\": \"Successfully changed password to user\"}");
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("{\"status\": \"failed\", \"message\": \"Password must contain at least one upper case character, one lower case character, one number and must be at least eight characters long\"}");
     }
 
     public void createPasswordResetTokenForUser(User user, String token) {

@@ -13,7 +13,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.security.PermitAll;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.util.UUID;
 
 @Component
@@ -23,6 +25,8 @@ public class EmailSenderService implements ApplicationListener<RegistrationCompl
     private final JavaMailSender mailSender;
     private User theUser;
     private final UserService userService;
+
+
 
     public void sendSimpleEmail(String toEmail,
                                 String subject,
@@ -51,6 +55,7 @@ public class EmailSenderService implements ApplicationListener<RegistrationCompl
         //5. Send the email.
         try {
             sendVerificationEmail(url);
+
         } catch (MessagingException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -70,6 +75,16 @@ public class EmailSenderService implements ApplicationListener<RegistrationCompl
         messageHelper.setSubject(subject);
         messageHelper.setText(mailContent, true);
         mailSender.send(message);
+    }
+    @PermitAll
+    public void sendSetPasswordEmail(String email, String oneTimePassword) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("Reset Password");
+        mimeMessageHelper.setText("<p>This is email for password reset.<br>Your temporary password is: " + oneTimePassword + "<br>Please log into your account with password above and immediately change it.</p>", true);
+
+        mailSender.send(mimeMessage);
     }
 
     public void sendResetToken(String url) {

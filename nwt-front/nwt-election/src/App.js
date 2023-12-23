@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import LoginPage from './components/notLogged/js/LoginPage';
+import ForgotPassword from './components/notLogged/js/ForgotPassword';
 import './App.css';
 import './components/notLogged/css/SignUpPage.css';
 import VerificationPage from './components/notLogged/js/VerificationPage'
@@ -66,6 +67,7 @@ function App() {
         <Router>
             <Switch>
                 <Route path="/home" component={HomePage}/>
+                <Route path="/forgot-password" component={ForgotPassword}/>
                 <Route path="/sign-up" component={SignUpPage}/>
                 <Route path="/verification" component={VerificationPage}/>
                 <Route path="/not-verified" component={NotVerifiedPage}/>

@@ -118,8 +118,8 @@ function LoginPage(props) {
                     {error && <p className="error-message">{error}</p>}
                 </div>
                 <div className="links">
-                    <a className="link" href="#">Izgubljena lozinka?</a>
-                    <button className="buttonLink" onClick={()=> history.push('/sign-up')}>Nemaš nalog? <b>Registruj se.</b></button>
+                <button className="buttonLink" onClick={()=> history.push('/forgot-password')}><b>Zaboravio sam šifru</b></button>
+                <button className="buttonLink" onClick={()=> history.push('/sign-up')}>Nemaš nalog? <b>Registruj se.</b></button>
                 </div>
             </div>
         </div>

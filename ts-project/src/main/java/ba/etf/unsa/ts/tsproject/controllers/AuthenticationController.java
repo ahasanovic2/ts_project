@@ -5,17 +5,24 @@ import ba.etf.unsa.ts.tsproject.auth.RegisterRequest;
 import ba.etf.unsa.ts.tsproject.email.RegistrationCompleteEvent;
 import ba.etf.unsa.ts.tsproject.entities.User;
 import ba.etf.unsa.ts.tsproject.entities.VerificationToken;
+import ba.etf.unsa.ts.tsproject.repositories.UserRepository;
 import ba.etf.unsa.ts.tsproject.repositories.VerificationTokenRepository;
 import ba.etf.unsa.ts.tsproject.services.AuthenticationService;
 import ba.etf.unsa.ts.tsproject.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/authentication")
@@ -27,6 +34,10 @@ public class AuthenticationController {
     private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository verificationTokenRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterRequest registerRequest, final HttpServletRequest request) {
@@ -50,6 +61,14 @@ public class AuthenticationController {
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         authenticationService.refreshToken(request, response);
     }
+
+    @PermitAll
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam Map<String, String> request){
+        String email = request.get("email");
+        return new ResponseEntity<>(authenticationService.forgotPassword(email), HttpStatus.OK);
+    }
+
 
     @GetMapping("/verifyEmail")
     public String verifyEmail(@RequestParam("token") String token){

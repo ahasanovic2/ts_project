@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     };
 
     const handleSubmit = async (event) => {
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://10.0.0.155:8080';
         event.preventDefault();
         
         try {

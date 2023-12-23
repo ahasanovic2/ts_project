@@ -19,7 +19,7 @@ const Users = () => {
                     return; // Do nothing if the user cancels
                 }
 
-                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://10.0.0.155:8080';
                 const token = localStorage.getItem('access_token');
 
                 const response = await fetch(`${BASE_URL}/users/delete-user?email=${email}`, {
@@ -44,7 +44,7 @@ const Users = () => {
         // Function to fetch admin data
         const fetchAdmins = async () => {
             try {
-                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://10.0.0.155:8080';
                 const token = localStorage.getItem('access_token');
         
                 const response = await fetch(`${BASE_URL}/users`, {

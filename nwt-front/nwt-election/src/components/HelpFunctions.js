@@ -10,7 +10,7 @@ export const useHandleLogout = () => {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', `Bearer ${token}`);
-        const response = fetch(`http://localhost:8080/users/front-logout?email=${decoded.sub}`, {
+        const response = fetch(`https://100.0.0.153:8080/users/front-logout?email=${decoded.sub}`, {
             method: 'POST',
             headers
         })
@@ -36,7 +36,7 @@ export const checkExpiration = (token, logoutFunction) => {
 }
 
 export const RefreshToken = async () => {
-    const BASE_URL = 'http://localhost:8080';
+    const BASE_URL = 'https://100.0.0.153:8080';
     const token = localStorage.getItem('refresh_token');
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');

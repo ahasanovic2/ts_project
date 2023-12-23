@@ -20,7 +20,7 @@ const SAChangePassword = () => {
                 setErrorMessage("");
 
                 const token = localStorage.getItem('access_token');
-                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+                const BASE_URL = process.env.REACT_APP_BASE_URL ||  'https://100.0.0.153:8080';
                 const headers = new Headers();
                 headers.append('Content-Type', 'application/json');
                 headers.append('Authorization', `Bearer ${token}`);

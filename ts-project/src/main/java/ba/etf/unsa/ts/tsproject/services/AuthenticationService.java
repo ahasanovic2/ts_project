@@ -17,7 +17,6 @@ import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +31,11 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -196,7 +198,21 @@ public class AuthenticationService {
 
         // Generate a one-time password
         SecureRandom random = new SecureRandom();
-        String oneTimePassword = new BigInteger(50, random).toString(32);
+
+        // Generate a random uppercase letter
+        char randomUppercaseLetter = (char) ('A' + random.nextInt(26));
+
+        // Create the one-time password with an additional uppercase letter
+        String oneTimePassword = new BigInteger(50, random).toString(32) + randomUppercaseLetter;
+
+        // Shuffle the OTP to mix the uppercase letter into it
+        List<Character> chars = oneTimePassword.chars()
+                .mapToObj(e -> (char) e)
+                .collect(Collectors.toList());
+        Collections.shuffle(chars);
+        oneTimePassword = chars.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining());
 
         // Encode and store the one-time password in the database
         String encodedOneTimePassword = passwordEncoder.encode(oneTimePassword);
@@ -211,5 +227,6 @@ public class AuthenticationService {
 
         return "Please check your email to set a new password!";
     }
+
 
 }

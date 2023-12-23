@@ -45,7 +45,7 @@ function List({ list, selectedVote, setSelectedVote }) {
 }
 
 function VotingPage({ candidates, lists, selectedVote, setSelectedVote, clearSelection }) {
-    const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+    const BASE_URL = process.env.REACT_APP_BASE_URL ||  'https://100.0.0.153:8080';
     const token = localStorage.getItem('access_token');
     const history = useHistory();
     const handleLogout = useHandleLogout();
@@ -127,7 +127,7 @@ function VotingPageFinal() {
     useEffect(() => {
         const fetchCandidates = async () => {
             const token = localStorage.getItem('access_token');
-            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'https://100.0.0.153:8080';
             try {
                 const response = await axios.get(`${BASE_URL}/elections/election/candidates?name=${localStorage.getItem('electionName')}`, {
                     headers: { Authorization: `Bearer ${token}` }
@@ -142,7 +142,7 @@ function VotingPageFinal() {
 
         const fetchLists = async () => {
             const token = localStorage.getItem('access_token');
-            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
+            const BASE_URL = process.env.REACT_APP_BASE_URL ||  'https://100.0.0.153:8080';
             try {
                 const response = await axios.get(`${BASE_URL}/elections/election/lists?name=${localStorage.getItem('electionName')}`, {
                     headers: { Authorization: `Bearer ${token}` }

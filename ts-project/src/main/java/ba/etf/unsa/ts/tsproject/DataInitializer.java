@@ -4,6 +4,8 @@ import ba.etf.unsa.ts.tsproject.auth.RegisterRequest;
 import ba.etf.unsa.ts.tsproject.entities.Election;
 import ba.etf.unsa.ts.tsproject.entities.PollingStation;
 import ba.etf.unsa.ts.tsproject.entities.Role;
+import ba.etf.unsa.ts.tsproject.entities.User;
+import ba.etf.unsa.ts.tsproject.repositories.UserRepository;
 import ba.etf.unsa.ts.tsproject.services.AuthenticationService;
 import ba.etf.unsa.ts.tsproject.services.ElectionService;
 import ba.etf.unsa.ts.tsproject.services.PollingStationService;
@@ -12,6 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -19,11 +22,14 @@ public class DataInitializer implements CommandLineRunner {
 
     private final AuthenticationService authenticationService;
     private final PollingStationService pollingStationService;
+    private final UserRepository userRepository;
     private final ElectionService electionService;
 
     @Override
     public void run(String... args) {
-        fill();
+        List<User> userList = userRepository.findAll();
+        if (userList == null || userList.isEmpty())
+            fill();
     }
     private void fill() {
         RegisterRequest admin = createSuperAdmin("Ahmedin", "Hasanovic", "ahasanovic2@etf.unsa.ba", "Sifra123");

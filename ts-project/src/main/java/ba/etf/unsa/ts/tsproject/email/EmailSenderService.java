@@ -82,15 +82,7 @@ public class EmailSenderService implements ApplicationListener<RegistrationCompl
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
         mimeMessageHelper.setTo(email);
         mimeMessageHelper.setSubject("Reset Password");
-        mimeMessageHelper.setText("""
-                <div>
-                  <p>This is email for password reset </p>
-                  <p>Your temporary password is: %s</p>
-                  <p>Please log into your account with password above and 
-                  immediately change it.
-                  </p>
-                </div>
-                """.formatted(oneTimePassword), true);
+        mimeMessageHelper.setText("<p>This is email for password reset.<br>Your temporary password is: " + oneTimePassword + "<br>Please log into your account with password above and immediately change it.</p>", true);
 
         mailSender.send(mimeMessage);
     }

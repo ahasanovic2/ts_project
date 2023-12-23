@@ -99,6 +99,11 @@ public class UserController {
         return userService.deleteAdmin(email);
     }
 
+    @DeleteMapping("/delete-user")
+    public ResponseEntity deleteUser(@RequestParam String email) {
+        return userService.deleteUser(email);
+    }
+
     @PutMapping("/change-password")
     public ResponseEntity changePassword(@RequestBody Passwords passwords) {
         return userService.changePassword(passwords);

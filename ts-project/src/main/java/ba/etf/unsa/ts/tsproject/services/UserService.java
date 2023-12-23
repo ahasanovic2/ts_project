@@ -74,9 +74,7 @@ public class UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorDetails(LocalDateTime.now(),"email","Email already present in database"));
         }
-
-
-
+        if(request.getPassword().matches(".*[A-Z].*") && request.getPassword().matches(".*[a-z].*") && request.getPassword().matches(".*\\d.*") && request.getPassword().length()>=8) {
             var user = User.builder()
                     .firstname(request.getFirstname())
                     .lastname(request.getLastname())
@@ -92,6 +90,13 @@ public class UserService {
             var refreshToken = jwtService.generateRefreshToken(user);
             saveUserToken(savedUser, jwtToken);
             return ResponseEntity.ok(user);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ErrorDetails(LocalDateTime.now(),
+                            "password",
+                            "Password must contain at least one uppercase symbol, one lowercase symbol, one number and password must be at least 8 characters long"));
+        }
 
     }
 
@@ -181,5 +186,8 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.OK).body("{\"status\":\"Success\"}");
     }
 
-
+    @Transactional
+    public ResponseEntity deleteUser(String email) {
+        return deleteAdmin(email);
+    }
 }

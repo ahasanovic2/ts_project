@@ -23,7 +23,7 @@ const SAResultsHome = () => {
 
     const handleResultsOption = async (option) => {
         const token = localStorage.getItem('access_token');
-        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'https://100.0.0.153:8080';
+        const BASE_URL = process.env.REACT_APP_BASE_URL ||  'http://localhost:8080';
         switch (option) {
             case 1:
                 try {

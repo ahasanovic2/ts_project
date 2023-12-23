@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                 .requestMatchers(POST, "/users/create-admin").hasRole(SUPERADMIN.name())
                 .requestMatchers(PUT, "/users/change-password").hasAnyRole(SUPERADMIN.name(), ADMIN.name(), USER.name())
                 .requestMatchers(DELETE, "/users/delete-admin").hasRole(SUPERADMIN.name())
+                .requestMatchers(DELETE, "/users/delete-user").hasAnyRole(SUPERADMIN.name(), ADMIN.name())
                 .requestMatchers(POST, "/users/{userId}/pollingStation/{pollingStationId}").hasAnyRole(USER.name(), SUPERADMIN.name())
                 .requestMatchers(POST, "/users/{userId}/pollingStation").hasAnyRole(ADMIN.name(), SUPERADMIN.name())
                 .requestMatchers(POST, "/users/pollingStation/{pollingStationId}").hasAnyRole(USER.name(), SUPERADMIN.name())

@@ -27,7 +27,7 @@ const Header = ({voting}) => {
             window.location.reload();
             alert('You tried to access User\'s page while not logged in as admin. You have been returned to admin\'s homepage.');
         } else if (role === 'ROLE_SUPERADMIN') {
-            history.push('/landing');
+            history.push('/superadmin-home');
             window.location.reload();
             alert('You tried to access User\'s page while not logged in as admin. You have been returned to superadmin\'s homepage.');
         }

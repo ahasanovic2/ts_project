@@ -37,11 +37,6 @@ function VerificationPage() {
                             Home
                         </button>
                     </div>
-                    <div className='resendButton'>
-                        <button>
-                            Resend
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>

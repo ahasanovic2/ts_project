@@ -19,10 +19,6 @@ function NotVerifiedPage() {
         history.push('/home');
     };
 
-    const handleResend = async () => {
-
-    };
-
 
     return (
         <div className='back'>
@@ -39,11 +35,6 @@ function NotVerifiedPage() {
                     <div className='homeButton'>
                         <button onClick={handleHome}>
                             Home
-                        </button>
-                    </div>
-                    <div className='resendButton'>
-                        <button>
-                            Resend
                         </button>
                     </div>
                 </div>

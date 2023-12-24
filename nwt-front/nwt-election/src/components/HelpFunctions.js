@@ -8,12 +8,19 @@ export const useHandleLogout = () => {
         const token = localStorage.getItem('access_token');
         const decoded = jwtDecode(token)
         const headers = new Headers();
+        const currentTime = Date.now().valueOf() / 1000;
+        if (decoded.exp < currentTime) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            history.push("/home");
+            return;
+        }
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', `Bearer ${token}`);
-        const response = fetch(`http://10.0.0.155:8080/users/front-logout?email=${decoded.sub}`, {
+        fetch(`http://10.0.0.155:8080/users/front-logout?email=${decoded.sub}`, {
             method: 'POST',
             headers
-        })
+        });
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         history.push("/home");

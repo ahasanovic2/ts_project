@@ -61,7 +61,6 @@ const Users = () => {
         
                 const data = await response.json();
 
-                console.log(data);
                 setUsers(data); // Set the admin data in state
             } catch (error) {
                 console.error("Error fetching admin data:", error);

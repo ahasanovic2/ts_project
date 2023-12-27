@@ -63,7 +63,6 @@ const SAAdmins = () => {
         
                 const data = await response.json();
 
-                console.log(data);
                 setAdmins(data); // Set the admin data in state
             } catch (error) {
                 console.error("Error fetching admin data:", error);

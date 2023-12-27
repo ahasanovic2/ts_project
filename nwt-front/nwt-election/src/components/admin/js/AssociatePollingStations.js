@@ -62,7 +62,6 @@ const AssociatePollingStations = () => {
             headers.append('Authorization', `Bearer ${token}`);
 
             const body = JSON.stringify(selectedPollingStations);
-            console.log(body);
             const response = await fetch(`${BASE_URL}/elections/election/set-pollingstations?name=${selectedElection}`, {
                 method: 'POST',
                 headers,

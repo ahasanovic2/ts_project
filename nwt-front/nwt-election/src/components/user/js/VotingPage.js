@@ -132,8 +132,6 @@ function VotingPageFinal() {
                 const response = await axios.get(`${BASE_URL}/elections/election/candidates?name=${localStorage.getItem('electionName')}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                console.log("Kandidati koji su dohvaceni su: ");
-                console.log(response.data);
                 setCandidates(response.data);
             } catch (error) {
                 console.error('Failed to fetch candidates:', error);
@@ -147,8 +145,6 @@ function VotingPageFinal() {
                 const response = await axios.get(`${BASE_URL}/elections/election/lists?name=${localStorage.getItem('electionName')}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                console.log("Lists fetched are: ");
-                console.log(response.data);
                 setLists(response.data);
             } catch (error) {
                 console.error('Failed to fetch lists:', error);
